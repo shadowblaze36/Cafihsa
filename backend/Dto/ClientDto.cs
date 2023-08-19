@@ -1,4 +1,4 @@
-namespace CreditBoss.Dto;
+namespace Cafihsa.Dto;
 
 public class ClientDto
 {

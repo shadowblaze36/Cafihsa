@@ -1,6 +1,6 @@
-using CreditBoss.Models;
+using Cafihsa.Models;
 
-namespace CreditBoss.Interfaces;
+namespace Cafihsa.Interfaces;
 
 public interface IUserService:ICrudService<User>
 {

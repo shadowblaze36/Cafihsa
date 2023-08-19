@@ -1,12 +1,12 @@
 using System.Text;
-using CreditBoss.Data;
-using CreditBoss.Interfaces;
-using CreditBoss.Services;
+using Cafihsa.Data;
+using Cafihsa.Interfaces;
+using Cafihsa.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CreditBoss.Extensions;
+namespace Cafihsa.Extensions;
 
 public static class ServiceExtensions
 {
@@ -24,7 +24,7 @@ public static class ServiceExtensions
     
     public static void ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<CreditBossContext>(options =>
+        services.AddDbContext<CafihsaContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
         );
     }
@@ -33,7 +33,7 @@ public static class ServiceExtensions
     {
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<CreditBossContext>();
+        var context = services.GetRequiredService<CafihsaContext>();
         if (context.Database.GetPendingMigrations().Any())
         {
             context.Database.Migrate();

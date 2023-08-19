@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CreditBoss.Migrations
+namespace Cafihsa.Migrations
 {
     /// <inheritdoc />
     public partial class CreditChanges : Migration

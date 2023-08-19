@@ -1,16 +1,16 @@
 using System.Globalization;
-using CreditBoss.Data;
-using CreditBoss.Dto;
-using CreditBoss.Interfaces;
+using Cafihsa.Data;
+using Cafihsa.Dto;
+using Cafihsa.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CreditBoss.Services;
+namespace Cafihsa.Services;
 
 public class CreditService : ICreditService
 {
-    private readonly CreditBossContext _db;
+    private readonly CafihsaContext _db;
     
-    public CreditService(CreditBossContext db)
+    public CreditService(CafihsaContext db)
     {
         _db = db;
     }

@@ -1,11 +1,11 @@
-using CreditBoss.Models;
+using Cafihsa.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CreditBoss.Data;
+namespace Cafihsa.Data;
 
-public class CreditBossContext : DbContext {
+public class CafihsaContext : DbContext {
     
-    public CreditBossContext(DbContextOptions<CreditBossContext> options) : base(options) { }
+    public CafihsaContext(DbContextOptions<CafihsaContext> options) : base(options) { }
     
     public DbSet<Client> Client { get; set; }
     public DbSet<Credit> Credit { get; set; }

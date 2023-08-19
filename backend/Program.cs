@@ -1,4 +1,4 @@
-using CreditBoss.Extensions;
+using Cafihsa.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureCors();

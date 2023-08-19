@@ -1,4 +1,4 @@
-namespace CreditBoss.Models;
+namespace Cafihsa.Models;
 
 public class References
 {

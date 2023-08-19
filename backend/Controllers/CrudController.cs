@@ -1,8 +1,8 @@
-using CreditBoss.Interfaces;
+using Cafihsa.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CreditBoss.Controllers
+namespace Cafihsa.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

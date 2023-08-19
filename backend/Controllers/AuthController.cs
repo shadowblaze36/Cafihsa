@@ -1,8 +1,8 @@
-using CreditBoss.Dto;
-using CreditBoss.Interfaces;
+using Cafihsa.Dto;
+using Cafihsa.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CreditBoss.Controllers;
+namespace Cafihsa.Controllers;
 
 [ApiController]
 [Route("admin/[controller]")]

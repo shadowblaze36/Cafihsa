@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CreditBoss.Dto;
+namespace Cafihsa.Dto;
 
 public class RegistrationDto
 {

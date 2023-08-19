@@ -1,12 +1,12 @@
-using CreditBoss.Data;
-using CreditBoss.Interfaces;
-using CreditBoss.Models;
+using Cafihsa.Data;
+using Cafihsa.Interfaces;
+using Cafihsa.Models;
 
-namespace CreditBoss.Services;
+namespace Cafihsa.Services;
 
 public class UserService: CrudService<User>, IUserService
 {
-    public UserService(CreditBossContext db) : base(db)
+    public UserService(CafihsaContext db) : base(db)
     {
     }
     

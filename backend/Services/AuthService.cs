@@ -1,16 +1,16 @@
-using CreditBoss.Data;
-using CreditBoss.Dto;
-using CreditBoss.Enums;
-using CreditBoss.Interfaces;
-using CreditBoss.Models;
+using Cafihsa.Data;
+using Cafihsa.Dto;
+using Cafihsa.Enums;
+using Cafihsa.Interfaces;
+using Cafihsa.Models;
 
-namespace CreditBoss.Services;
+namespace Cafihsa.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly CreditBossContext _db;
+    private readonly CafihsaContext _db;
 
-    public AuthService(CreditBossContext db)
+    public AuthService(CafihsaContext db)
     {
         _db = db;
     }

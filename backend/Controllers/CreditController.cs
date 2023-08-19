@@ -1,8 +1,8 @@
-using CreditBoss.Enums;
-using CreditBoss.Interfaces;
+using Cafihsa.Enums;
+using Cafihsa.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CreditBoss.Controllers;
+namespace Cafihsa.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

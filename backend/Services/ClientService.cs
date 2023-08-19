@@ -1,17 +1,17 @@
-using CreditBoss.Data;
-using CreditBoss.Dto;
-using CreditBoss.Enums;
-using CreditBoss.Interfaces;
-using CreditBoss.Models;
+using Cafihsa.Data;
+using Cafihsa.Dto;
+using Cafihsa.Enums;
+using Cafihsa.Interfaces;
+using Cafihsa.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CreditBoss.Services;
+namespace Cafihsa.Services;
 
 public class ClientService : IClientService
 {
-    private readonly CreditBossContext _db;
+    private readonly CafihsaContext _db;
     
-    public ClientService(CreditBossContext db)
+    public ClientService(CafihsaContext db)
     {
         _db = db;
     }

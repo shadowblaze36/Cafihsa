@@ -1,4 +1,4 @@
-namespace CreditBoss.Interfaces;
+namespace Cafihsa.Interfaces;
 
 public interface ICrudService<T> where T : class
 {

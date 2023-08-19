@@ -1,22 +1,21 @@
 version: "3.4"
 
 services:
-    creditboss-api:
-        build:
-          context: .
-          dockerfile: Dockerfile
-        container_name: creditboss-api
-        ports:
-          - "8080:80"
-        depends_on:
-          - creditboss-db
+  cafihsa-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cafihsa-api
+    ports:
+      - "8080:80"
+    depends_on:
+      - cafihsa-db
 
-    creditboss-db:
-        image: "mcr.microsoft.com/mssql/server:2022-latest"
-        ports:
-          - "1433:1433"
-        container_name: creditboss-db
-        environment:
-            SA_PASSWORD: "S3cur3P@ssW0rd!"
-            ACCEPT_EULA: "Y"
-
+  cafihsa-db:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports:
+      - "1433:1433"
+    container_name: cafihsa-db
+    environment:
+      SA_PASSWORD: "S3cur3P@ssW0rd!"
+      ACCEPT_EULA: "Y"

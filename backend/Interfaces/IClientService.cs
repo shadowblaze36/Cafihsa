@@ -1,6 +1,6 @@
-using CreditBoss.Dto;
+using Cafihsa.Dto;
 
-namespace CreditBoss.Interfaces;
+namespace Cafihsa.Interfaces;
 
 public interface IClientService
 {

@@ -1,6 +1,6 @@
-using CreditBoss.Enums;
+using Cafihsa.Enums;
 
-namespace CreditBoss.Models;
+namespace Cafihsa.Models;
 
 public class User
 {

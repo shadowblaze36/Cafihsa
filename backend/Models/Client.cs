@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CreditBoss.Models
+namespace Cafihsa.Models
 {
     public class Client
     {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CreditBoss.Migrations
+namespace Cafihsa.Migrations
 {
     /// <inheritdoc />
     public partial class InitialModels : Migration

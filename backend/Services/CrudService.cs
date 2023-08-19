@@ -1,13 +1,13 @@
-using CreditBoss.Data;
+using Cafihsa.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CreditBoss.Services;
+namespace Cafihsa.Services;
 
 public abstract class CrudService<T> where T : class
 {
-    private readonly CreditBossContext _db;
+    private readonly CafihsaContext _db;
 
-    protected CrudService(CreditBossContext db)
+    protected CrudService(CafihsaContext db)
     {
         _db = db;
     }

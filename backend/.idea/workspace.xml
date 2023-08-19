@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="07e77df1-c0ab-4017-a456-e6da984e4eaa" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.CreditBoss/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.CreditBoss/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.CreditBoss/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Cafihsa/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Cafihsa/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Cafihsa/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Controllers/ClientController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/CreditBossContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/CafihsaContext.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Extensions/MigrationExtension.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Extensions/ServiceExtension.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Interfaces/IClientService.cs" afterDir="false" />
@@ -14,10 +14,10 @@
       <change afterPath="$PROJECT_DIR$/Migrations/20230427014335_InitialMigration.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Migrations/20230427015621_TestMigration.Designer.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Migrations/20230427015621_TestMigration.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Migrations/CreditBossContextModelSnapshot.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Migrations/CafihsaContextModelSnapshot.cs" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Services/ClientService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/WeatherForecastController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CreditBoss.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/CreditBoss.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cafihsa.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Cafihsa.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Client.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Client.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
@@ -48,7 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/jorgesaravia/Dev/CreditBoss",
+    "last_opened_file_path": "/Users/jorgesaravia/Dev/Cafihsa",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }

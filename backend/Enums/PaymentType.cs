@@ -1,4 +1,4 @@
-namespace CreditBoss.Enums;
+namespace Cafihsa.Enums;
 
 public enum PaymentType
 {
