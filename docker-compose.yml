@@ -1,13 +1,22 @@
 version: "3.4"
 
 services:
+  cafihsa-web:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    container_name: cafihsa-web
+    ports:
+      - "3000:3000"
+
   cafihsa-api:
     build:
-      context: .
+      context: backend
       dockerfile: Dockerfile
     container_name: cafihsa-api
     ports:
-      - "8080:80"
+      - "5038:5038"
+      - "7030:7030"
     depends_on:
       - cafihsa-db
 

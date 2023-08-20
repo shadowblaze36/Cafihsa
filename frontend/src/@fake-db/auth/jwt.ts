@@ -47,6 +47,8 @@ mock.onPost('/jwt/login').reply(request => {
 
   const user = users.find(u => u.email === email && u.password === password)
 
+  console.log(user?.username)
+
   if (user) {
     const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret as string, { expiresIn: jwtConfig.expirationTime })
 
