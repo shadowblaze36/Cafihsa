@@ -44,4 +44,12 @@ public class ClientController : ControllerBase
         await _clientService.Create(client);
         return Ok();
     }
+
+    [HttpGet("list")]
+    public async Task<IActionResult> GetList()
+    {
+        var stats = await _clientService.GetAllAsListAsync();
+        return Ok(stats);
+    }
+
 }

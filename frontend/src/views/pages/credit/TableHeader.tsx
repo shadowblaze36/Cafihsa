@@ -5,7 +5,8 @@ import TextField from '@mui/material/TextField'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import AddClientDialog from './AddClientDialog'
+
+// import AddClientDialog from './AddClientDialog'
 
 interface TableHeaderProps {
   value: string
@@ -38,15 +39,15 @@ const TableHeader = (props: TableHeaderProps) => {
           size='small'
           value={value}
           sx={{ mr: 4 }}
-          placeholder='Search Client'
+          placeholder='Search Credit'
           onChange={e => handleFilter(e.target.value)}
         />
 
         <Button onClick={toggle} variant='contained' sx={{ '& svg': { mr: 2 } }}>
           <Icon fontSize='1.125rem' icon='tabler:plus' />
-          Add New Client
+          Add New Credit
         </Button>
-        <AddClientDialog />
+        {/* <AddClientDialog /> */}
       </Box>
     </Box>
   )

@@ -42,7 +42,7 @@ import { RootState, AppDispatch } from 'src/store'
 import { ThemeColor } from 'src/@core/layouts/types'
 
 // ** Custom Table Components Imports
-import TableHeader from 'src/views/pages/client/TableHeader'
+import TableHeader from 'src/views/pages/credit/TableHeader'
 import AddClientDrawer from 'src/views/pages/client/AddClientDrawer'
 import { format } from 'date-fns'
 import { CreditsType } from 'src/types/creditTypes'

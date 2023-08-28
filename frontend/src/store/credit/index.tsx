@@ -1,5 +1,5 @@
 // ** Redux Imports
-// import { Dispatch } from 'redux'
+import { Dispatch } from 'redux'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios Imports
@@ -12,10 +12,10 @@ interface DataParams {
   status: string
 }
 
-// interface Redux {
-//   getState: any
-//   dispatch: Dispatch<any>
-// }
+interface Redux {
+  getState: any
+  dispatch: Dispatch<any>
+}
 
 // ** Fetch Credits
 export const fetchCredits = createAsyncThunk('credits/fetchCredits', async (params: DataParams) => {
@@ -24,33 +24,33 @@ export const fetchCredits = createAsyncThunk('credits/fetchCredits', async (para
   return response.data
 })
 
-// // ** Add Client
-// export const addClient = createAsyncThunk(
-//   'clients/addClient',
-//   async (data: { [key: string]: number | string }, { getState, dispatch }: Redux) => {
-//     console.log(data)
+// ** Add Credit
+export const addCredit = createAsyncThunk(
+  'credits/addCredit',
+  async (data: { [key: string]: number | string }, { getState, dispatch }: Redux) => {
+    console.log(data)
 
-//     const config = {
-//       method: 'post',
-//       url: `${baseURL}/Client`,
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       data: data
-//     }
+    const config = {
+      method: 'post',
+      url: `${baseURL}/Client`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    }
 
-//     try {
-//       await axios.request(config)
+    try {
+      await axios.request(config)
 
-//       // dispatch(fetchData(getState().clients.params));
-//       // dispatch(fetchClientStats());
+      // dispatch(fetchData(getState().clients.params));
+      // dispatch(fetchClientStats());
 
-//       return { success: true }
-//     } catch (error) {
-//       return { success: false }
-//     }
-//   }
-// )
+      return { success: true }
+    } catch (error) {
+      return { success: false }
+    }
+  }
+)
 
 // // ** Delete Client
 // export const deleteClient = createAsyncThunk(
@@ -71,7 +71,7 @@ export const fetchCreditStatuses = createAsyncThunk('credits/fetchCreditStatuses
   return response.data
 })
 
-export const clientsSlice = createSlice({
+export const creditsSlice = createSlice({
   name: 'credits',
   initialState: {
     data: [],
@@ -89,4 +89,4 @@ export const clientsSlice = createSlice({
   }
 })
 
-export default clientsSlice.reducer
+export default creditsSlice.reducer

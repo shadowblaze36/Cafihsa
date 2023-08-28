@@ -140,5 +140,18 @@ public class ClientService : IClientService
         await _db.SaveChangesAsync();
 
     }
+
+    public async Task<List<ListDto>> GetAllAsListAsync()
+    {
+        var dbClients = await _db.Client.Include(c => c.Credits).ToListAsync();
+
+        var clients = dbClients.Select(client => new ListDto
+        {
+            Id = client.Id,
+            Name = client.FirstName + " " + client.LastName,
+        }).ToList();
+
+        return clients;
+    }
     
 }
