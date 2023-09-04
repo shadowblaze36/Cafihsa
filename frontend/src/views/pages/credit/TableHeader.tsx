@@ -6,8 +6,6 @@ import TextField from '@mui/material/TextField'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// import AddClientDialog from './AddClientDialog'
-
 interface TableHeaderProps {
   value: string
   toggle: () => void
@@ -47,7 +45,6 @@ const TableHeader = (props: TableHeaderProps) => {
           <Icon fontSize='1.125rem' icon='tabler:plus' />
           Add New Credit
         </Button>
-        {/* <AddClientDialog /> */}
       </Box>
     </Box>
   )
