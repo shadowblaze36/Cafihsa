@@ -45,10 +45,10 @@ public class ClientController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("list")]
-    public async Task<IActionResult> GetList()
+    [HttpGet("List")]
+    public async Task<IActionResult> GetList([FromQuery]string? query)
     {
-        var stats = await _clientService.GetAllAsListAsync();
+        var stats = await _clientService.GetAllAsListAsync(query);
         return Ok(stats);
     }
 

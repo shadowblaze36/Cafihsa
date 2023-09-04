@@ -43,7 +43,7 @@ import { ThemeColor } from 'src/@core/layouts/types'
 
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/pages/credit/TableHeader'
-import AddClientDrawer from 'src/views/pages/client/AddClientDrawer'
+import AddCreditDrawer from 'src/views/pages/credit/AddCreditDrawer'
 import { format } from 'date-fns'
 import { CreditsType } from 'src/types/creditTypes'
 
@@ -55,7 +55,7 @@ interface CellType {
   row: CreditsType
 }
 
-// ** renders client column
+// ** renders cred column
 const creditStatusObj: CreditStatusType = {
   onDate: 'success',
   late: 'warning',
@@ -252,7 +252,7 @@ const CreditList = () => {
   const [value, setValue] = useState<string>('')
   const [status, setStatus] = useState<string>('')
   const [pageSize, setPageSize] = useState<number>(10)
-  const [addClientOpen, setAddClientOpen] = useState<boolean>(false)
+  const [addCreditOpen, setAddCreditOpen] = useState<boolean>(false)
 
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
@@ -279,7 +279,7 @@ const CreditList = () => {
     setStatus(e.target.value)
   }, [])
 
-  const toggleAddClientDrawer = () => setAddClientOpen(!addClientOpen)
+  const toggleAddCreditDrawer = () => setAddCreditOpen(!addCreditOpen)
 
   return (
     <Grid container spacing={6.5}>
@@ -312,7 +312,7 @@ const CreditList = () => {
             </Grid>
           </CardContent>
           <Divider sx={{ m: '0 !important' }} />
-          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddClientDrawer} />
+          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddCreditDrawer} />
           <DataGrid
             autoHeight
             rowHeight={62}
@@ -326,7 +326,7 @@ const CreditList = () => {
         </Card>
       </Grid>
 
-      <AddClientDrawer open={addClientOpen} toggle={toggleAddClientDrawer} />
+      <AddCreditDrawer open={addCreditOpen} toggle={toggleAddCreditDrawer} />
     </Grid>
   )
 }

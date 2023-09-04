@@ -141,17 +141,32 @@ public class ClientService : IClientService
 
     }
 
-    public async Task<List<ListDto>> GetAllAsListAsync()
+    public async Task<List<ListDto>> GetAllAsListAsync(string? query)
     {
         var dbClients = await _db.Client.Include(c => c.Credits).ToListAsync();
+       
 
         var clients = dbClients.Select(client => new ListDto
         {
             Id = client.Id,
             Name = client.FirstName + " " + client.LastName,
         }).ToList();
+        
+        clients = QueryClientsAsList(clients, query);
 
         return clients;
+    }
+    
+    private static List<ListDto> QueryClientsAsList(List<ListDto> queryableClients, string? query)
+    {
+        if (!string.IsNullOrEmpty(query))
+        {
+            queryableClients = queryableClients.Where(client =>
+                IsMatch(client.Id.ToString(), query) ||
+                IsMatch(client.Name, query)
+            ).ToList();
+        }
+        return queryableClients;
     }
     
 }

@@ -14,20 +14,38 @@ import toast from 'react-hot-toast'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, Controller } from 'react-hook-form'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
 // ** Store Imports
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // ** Actions Imports
 import { addCredit } from 'src/store/credit'
+import { fetchClientList } from 'src/store/client'
 
 // ** Types Imports
-import { AppDispatch } from 'src/store'
+import { AppDispatch, RootState } from 'src/store'
 import { CreditData } from 'src/interfaces/CreditData'
-import { Divider, Grid, InputAdornment } from '@mui/material'
+import {
+  Avatar,
+  Divider,
+  Grid,
+  InputAdornment,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemSecondaryAction,
+  ListItemText
+} from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
+import { ListType } from 'src/types/ListTypes'
+
+// ** Utils Import
+import { getInitials } from 'src/@core/utils/get-initials'
 
 interface SidebarAddCreditType {
   open: boolean
@@ -67,7 +85,18 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
   // ** Props
   const { open, toggle } = props
 
-  // ** Hooks
+  const [selectedClient, setSelectedClient] = useState<number>(0)
+
+  const handleListItemClick = (index: number) => {
+    setSelectedClient(index)
+  }
+
+  const handleFilter = useCallback((val: string) => {
+    setSearchValue(val)
+  }, [])
+
+  const [searchValue, setSearchValue] = useState<string>('')
+
   const dispatch = useDispatch<AppDispatch>()
   const {
     reset,
@@ -80,6 +109,17 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
+
+  // ** Hooks
+  useEffect(() => {
+    dispatch(
+      fetchClientList({
+        query: searchValue
+      })
+    )
+  }, [dispatch, searchValue])
+
+  const store = useSelector((state: RootState) => state.clients)
 
   const onSubmit = (data: CreditData) => {
     dispatch(addCredit({ ...data })).then((result: any) => {
@@ -95,7 +135,6 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
   }
 
   const handleClose = () => {
-    setValue('phone', '')
     toggle()
     reset()
   }
@@ -133,23 +172,58 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
 
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                Personal Info
+                Select Client
               </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                size='small'
+                value={searchValue}
+                sx={{ mr: 4 }}
+                placeholder='Search Client'
+                onChange={e => handleFilter(e.target.value)}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <List sx={{ maxHeight: 300, overflow: 'auto', position: 'relative' }}>
+                {store.list.map((client: ListType, index) => (
+                  <ListItem dense key={client.id}>
+                    <ListItemButton selected={selectedClient === 0} onClick={() => handleListItemClick(client.id)}>
+                      <ListItemAvatar>
+                        <CustomAvatar
+                          skin='light'
+                          color='primary'
+                          sx={{ mr: 2.5, width: 38, height: 38, fontSize: '1rem', fontWeight: 500 }}
+                        >
+                          {getInitials(client.name)}
+                        </CustomAvatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={client.name} />
+                      <ListItemSecondaryAction>
+                        <IconButton edge='end'>
+                          <ListItemText primary={client.id} />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
               <FormControl fullWidth>
                 <Controller
-                  name='firstName'
+                  name='clientId'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
                       value={value}
                       onChange={onChange}
-                      error={Boolean(errors.firstName)}
+                      error={Boolean(errors.clientId)}
                       fullWidth
-                      label='First Name'
+                      label='Client'
                       placeholder='John'
                       InputProps={{
                         startAdornment: (
@@ -161,23 +235,27 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
                     />
                   )}
                 />
-                {errors.firstName && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.firstName.message}</FormHelperText>
+                {errors.clientId && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.clientId.message}</FormHelperText>
                 )}
               </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Divider sx={{ mb: '0 !important' }} />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
               <FormControl fullWidth>
                 <Controller
-                  name='lastName'
+                  name='amount'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
                       value={value}
                       onChange={onChange}
-                      error={Boolean(errors.lastName)}
+                      error={Boolean(errors.amount)}
                       fullWidth
                       label='Last Name'
                       placeholder='Doe'
@@ -191,621 +269,7 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
                     />
                   )}
                 />
-                {errors.lastName && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.lastName.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='email'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.email)}
-                      fullWidth
-                      type='email'
-                      label='Email'
-                      placeholder='carterleonard@gmail.com'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:mail' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='phone'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.phone)}
-                      fullWidth
-                      type='tel'
-                      label='Phone'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.phone && <FormHelperText sx={{ color: 'error.main' }}>{errors.phone.message}</FormHelperText>}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='birthdate'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.birthdate)}
-                      fullWidth
-                      type='date'
-                      label='Birthdate'
-                      placeholder='mm/dd/yyyy'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:calendar' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.birthdate && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.birthdate.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='identificationNumber'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.identificationNumber)}
-                      fullWidth
-                      label='Identification Number'
-                      placeholder='1234567'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:credit-card' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.identificationNumber && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.identificationNumber.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
-              <FormControl fullWidth>
-                <Controller
-                  name='address'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.address)}
-                      multiline
-                      minRows={1}
-                      fullWidth
-                      label='Address'
-                      placeholder='1456, Liberty Street'
-                      sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='mdi:map-marker' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.address && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.address.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Divider sx={{ mb: '0 !important' }} />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                Work Details
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workPlace'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workPlace)}
-                      fullWidth
-                      label='Workplace'
-                      placeholder='Amazon'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:building' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workPlace && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workPlace.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workPhone'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workPhone)}
-                      fullWidth
-                      type='tel'
-                      label='Work Phone'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workPhone && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workPhone.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='bossName'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.bossName)}
-                      fullWidth
-                      label='Boss Name'
-                      placeholder='John'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:user-up' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.bossName && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.bossName.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='bossPhone'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.bossPhone)}
-                      fullWidth
-                      type='tel'
-                      label='Boss Phone'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.bossPhone && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.bossPhone.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='startDate'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.startDate)}
-                      fullWidth
-                      type='date'
-                      label='Start Date'
-                      placeholder='mm/dd/yyyy'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:calendar' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.startDate && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.startDate.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workAddress'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workAddress)}
-                      multiline
-                      minRows={1}
-                      fullWidth
-                      label='Work Address'
-                      placeholder='1456, Liberty Street'
-                      sx={{ '& .MuiOutlinedInput-root': { alignItems: 'baseline' } }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='mdi:map-marker' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workAddress && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workAddress.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Divider sx={{ mb: '0 !important' }} />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                Personal References
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='personalReference1'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.personalReference1)}
-                      fullWidth
-                      label='Name 1'
-                      placeholder='John'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:user-star' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.personalReference1 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.personalReference1.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='personalReferencePhone1'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.personalReferencePhone1)}
-                      fullWidth
-                      type='tel'
-                      label='Phone 1'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.personalReferencePhone1 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.personalReferencePhone1.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='personalReference2'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.personalReference2)}
-                      fullWidth
-                      label='Name 2'
-                      placeholder='John'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:user-star' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.personalReference2 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.personalReference2.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='personalReferencePhone2'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.personalReferencePhone2)}
-                      fullWidth
-                      type='tel'
-                      label='Phone 2'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.personalReferencePhone2 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.personalReferencePhone2.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Divider sx={{ mb: '0 !important' }} />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                Work References
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workReference1'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workReference1)}
-                      fullWidth
-                      label='Name 1'
-                      placeholder='John'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:user-star' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workReference1 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workReference1.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workReferencePhone1'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workReferencePhone1)}
-                      fullWidth
-                      type='tel'
-                      label='Phone 1'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workReferencePhone1 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workReferencePhone1.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workReference2'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workReference2)}
-                      fullWidth
-                      label='Name 2'
-                      placeholder='John'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:user-star' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workReference2 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workReference2.message}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='workReferencePhone2'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.workReferencePhone2)}
-                      fullWidth
-                      type='tel'
-                      label='Phone 2'
-                      placeholder='+1(123) 1233-1231'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:phone' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.workReferencePhone2 && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.workReferencePhone2.message}</FormHelperText>
-                )}
+                {errors.amount && <FormHelperText sx={{ color: 'error.main' }}>{errors.amount.message}</FormHelperText>}
               </FormControl>
             </Grid>
           </Grid>

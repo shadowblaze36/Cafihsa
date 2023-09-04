@@ -7,5 +7,5 @@ public interface IClientService
     Task<List<ClientDto>> GetAllAsync(string? query, string? status);
     Task<ClientStatsDto> GetClientStatsAsync();
     Task Create(ClientDto clientDto);
-    Task<List<ListDto>> GetAllAsListAsync();
+    Task<List<ListDto>> GetAllAsListAsync(string? query);
 }

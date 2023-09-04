@@ -12,6 +12,10 @@ interface DataParams {
   status: string
 }
 
+interface ListParams {
+  query: string
+}
+
 interface Redux {
   getState: any
   dispatch: Dispatch<any>
@@ -76,6 +80,13 @@ export const fetchClientStats = createAsyncThunk('clients/fetchClientStats', asy
   return response.data
 })
 
+// ** Fetch Clients as List
+export const fetchClientList = createAsyncThunk('clients/fetchClientList', async (params: ListParams) => {
+  const response = await axios.get(`${baseURL}/Client/List`, { params })
+
+  return response.data
+})
+
 export const clientsSlice = createSlice({
   name: 'clients',
   initialState: {
@@ -86,7 +97,8 @@ export const clientsSlice = createSlice({
       paidClients: 0,
       lateClients: 0,
       inactiveClients: 0
-    }
+    },
+    list: []
   },
   reducers: {},
   extraReducers: builder => {
@@ -99,6 +111,9 @@ export const clientsSlice = createSlice({
 
     builder.addCase(fetchClientStats.fulfilled, (state, action) => {
       state.stats = action.payload
+    })
+    builder.addCase(fetchClientList.fulfilled, (state, action) => {
+      state.list = action.payload
     })
   }
 })

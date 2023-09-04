@@ -47,8 +47,8 @@ import { ClientsType } from 'src/types/clientTypes'
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/pages/client/TableHeader'
 import AddClientDrawer from 'src/views/pages/client/AddClientDrawer'
-import ClientStatsRow from "../../views/pages/client/ClientStatsRow";
-import { format } from "date-fns";
+import ClientStatsRow from '../../views/pages/client/ClientStatsRow'
+import { format } from 'date-fns'
 
 interface ClientStatusType {
   [key: string]: ThemeColor
@@ -143,7 +143,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
 
 const columns = [
   {
-    flex: 0.10,
+    flex: 0.1,
     minWidth: 45,
     headerName: 'id',
     field: 'id',
@@ -221,7 +221,7 @@ const columns = [
     field: 'birthdate',
     headerName: 'Birthdate',
     renderCell: ({ row }: CellType) => {
-      const formattedDate = format(new Date(row.birthdate), 'dd/MM/yyyy');
+      const formattedDate = format(new Date(row.birthdate), 'dd/MM/yyyy')
 
       return (
         <Typography noWrap sx={{ color: 'text.secondary' }}>
@@ -269,11 +269,10 @@ const ClientList = () => {
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.clients)
 
-
   useEffect(() => {
-    dispatch(fetchClientStatuses());
-    dispatch(fetchClientStats());
-  }, [dispatch]);
+    dispatch(fetchClientStatuses())
+    dispatch(fetchClientStats())
+  }, [dispatch])
 
   useEffect(() => {
     dispatch(
@@ -316,8 +315,10 @@ const ClientList = () => {
                     inputProps={{ placeholder: 'Select Status' }}
                   >
                     <MenuItem value=''>Select Status</MenuItem>
-                    {store.statuses.map((status) => (
-                      <MenuItem key={status} value={status}>{status}</MenuItem>
+                    {store.statuses.map(status => (
+                      <MenuItem key={status} value={status}>
+                        {status}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -338,7 +339,6 @@ const ClientList = () => {
           />
         </Card>
       </Grid>
-
 
       <AddClientDrawer open={addClientOpen} toggle={toggleAddClientDrawer} />
     </Grid>
