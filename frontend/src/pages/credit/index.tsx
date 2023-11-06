@@ -144,7 +144,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
 const columns = [
   {
     flex: 0.1,
-    minWidth: 40,
+    minWidth: 60,
     headerName: 'id',
     field: 'id',
     renderCell: ({ row }: CellType) => {
@@ -196,9 +196,14 @@ const columns = [
     headerName: 'Balance',
     field: 'balance',
     renderCell: ({ row }: CellType) => {
+      const balance = row.balance.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      })
+
       return (
         <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-          {row.balance}
+          {balance}
         </Typography>
       )
     }
@@ -239,7 +244,7 @@ const columns = [
   },
   {
     flex: 0.1,
-    minWidth: 20,
+    minWidth: 100,
     sortable: false,
     field: 'actions',
     headerName: 'Actions',

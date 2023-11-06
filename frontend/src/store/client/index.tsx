@@ -28,6 +28,14 @@ export const fetchData = createAsyncThunk('clients/fetchData', async (params: Da
   return response.data
 })
 
+// ** Fetch Single Client
+export const fetchClient = createAsyncThunk('clients/fetchClient', async (id: number) => {
+  const response = await axios.get(`${baseURL}/Client/${id}`)
+  console.log(response.data)
+
+  return response.data
+})
+
 // ** Add Client
 export const addClient = createAsyncThunk(
   'clients/addClient',
@@ -98,7 +106,15 @@ export const clientsSlice = createSlice({
       lateClients: 0,
       inactiveClients: 0
     },
-    list: []
+    list: [],
+    client: {
+      id: 0,
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      identificationNumber: ''
+    }
   },
   reducers: {},
   extraReducers: builder => {
@@ -108,12 +124,14 @@ export const clientsSlice = createSlice({
     builder.addCase(fetchClientStatuses.fulfilled, (state, action) => {
       state.statuses = action.payload
     })
-
     builder.addCase(fetchClientStats.fulfilled, (state, action) => {
       state.stats = action.payload
     })
     builder.addCase(fetchClientList.fulfilled, (state, action) => {
       state.list = action.payload
+    })
+    builder.addCase(fetchClient.fulfilled, (state, action) => {
+      state.client = action.payload
     })
   }
 })

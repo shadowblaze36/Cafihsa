@@ -24,6 +24,14 @@ public class ClientController : ControllerBase
         return Ok(clients);
     }
     
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var client = await _clientService.GetByIdAsync(id);
+        return Ok(client);
+    }
+    
     [HttpGet("Stats")]
     public async Task<IActionResult> GetStats()
     {

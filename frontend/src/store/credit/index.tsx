@@ -28,22 +28,17 @@ export const fetchCredits = createAsyncThunk('credits/fetchCredits', async (para
 export const addCredit = createAsyncThunk(
   'credits/addCredit',
   async (data: { [key: string]: number | string }, { getState, dispatch }: Redux) => {
-    console.log(data)
-
     const config = {
       method: 'post',
-      url: `${baseURL}/Client`,
+      url: `${baseURL}/Credit`,
       headers: {
         'Content-Type': 'application/json'
       },
       data: data
     }
-
     try {
       await axios.request(config)
-
-      // dispatch(fetchData(getState().clients.params));
-      // dispatch(fetchClientStats());
+      dispatch(fetchCredits(getState().clients.params))
 
       return { success: true }
     } catch (error) {
@@ -51,18 +46,6 @@ export const addCredit = createAsyncThunk(
     }
   }
 )
-
-// // ** Delete Client
-// export const deleteClient = createAsyncThunk(
-//   'clients/deleteClient',
-//   async (id: number | string, { getState, dispatch }: Redux) => {
-//     const response = await axios.delete(`${baseURL}/Client/${id}`)
-
-//     // dispatch(fetchData(getState().clients.params))
-
-//     return response.data
-//   }
-// )
 
 // ** Fetch Credit Statuses
 export const fetchCreditStatuses = createAsyncThunk('credits/fetchCreditStatuses', async () => {

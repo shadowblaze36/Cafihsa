@@ -16,6 +16,30 @@ public class ClientService : IClientService
         _db = db;
     }
 
+    public async Task<ClientDto> GetByIdAsync(int id)
+    {
+        var dbClient = await _db.Client.FirstOrDefaultAsync(c=> c.Id == id);
+        
+        if (dbClient == null)
+        {
+            return new ClientDto();
+        }
+        
+        var client = new ClientDto
+        {
+            Id = dbClient.Id,
+            FirstName = dbClient.FirstName,
+            LastName = dbClient.LastName,
+            Email = dbClient.Email,
+            Phone = dbClient.Phone,
+            Address = dbClient.Address,
+            Birthdate = DateOnly.FromDateTime(dbClient.Birthdate),
+            IdentificationNumber = dbClient.IdentificationNumber,
+            Status = GetClientStatus(dbClient.Credits)
+        };
+        return client;
+    }
+
     public async Task<List<ClientDto>> GetAllAsync(string? query, string? status)
     {
         var dbClients = await _db.Client.Include(c => c.Credits).ToListAsync();

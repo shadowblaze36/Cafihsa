@@ -1,7 +1,9 @@
 using System.Globalization;
 using Cafihsa.Data;
 using Cafihsa.Dto;
+using Cafihsa.Enums;
 using Cafihsa.Interfaces;
+using Cafihsa.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cafihsa.Services;
@@ -61,6 +63,21 @@ public class CreditService : ICreditService
     private static bool IsMatch(string? value, string query)
     {
         return value != null && value.Contains(query, StringComparison.OrdinalIgnoreCase);
+    }
+    
+    public async Task Create(NewCreditDto creditDto)
+    {
+        var credit = new Credit()
+        {
+            ClientId = creditDto.ClientId,
+            InitialAmount = creditDto.Amount,
+            CurrentAmount = creditDto.Amount,
+            InterestRate = creditDto.InterestRate,
+            StartDate = DateTime.Now,
+            Status = CreditStatus.Active
+        };
+        await _db.Credit.AddAsync(credit);
+        await _db.SaveChangesAsync();
     }
     
 }

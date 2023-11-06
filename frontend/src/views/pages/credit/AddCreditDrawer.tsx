@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Actions Imports
 import { addCredit } from 'src/store/credit'
 import { fetchClientList } from 'src/store/client'
+import { fetchClient } from 'src/store/client'
 
 // ** Types Imports
 import { AppDispatch, RootState } from 'src/store'
@@ -52,16 +53,6 @@ interface SidebarAddCreditType {
   toggle: () => void
 }
 
-const showErrors = (field: string, valueLen: number, min: number) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
-
 const Header = styled(Box)<BoxProps>(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -71,8 +62,16 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 
 const schema = yup.object().shape({
   clientId: yup.number().required(),
-  amount: yup.number().required(),
-  interestRate: yup.number().required()
+  amount: yup
+    .number()
+    .transform(value => (Number.isNaN(value) ? null : value))
+    .nullable()
+    .required('Required'),
+  interestRate: yup
+    .number()
+    .transform(value => (Number.isNaN(value) ? null : value))
+    .nullable()
+    .required('Required')
 })
 
 const defaultValues: CreditData = {
@@ -86,9 +85,11 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
   const { open, toggle } = props
 
   const [selectedClient, setSelectedClient] = useState<number>(0)
+  const client = useSelector((state: RootState) => state.clients.client)
 
-  const handleListItemClick = (index: number) => {
+  const handleListItemClick = async (index: number) => {
     setSelectedClient(index)
+    await dispatch(fetchClient(index))
   }
 
   const handleFilter = useCallback((val: string) => {
@@ -122,6 +123,12 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
   const store = useSelector((state: RootState) => state.clients)
 
   const onSubmit = (data: CreditData) => {
+    if (selectedClient === 0) {
+      toast.error('Please select a client')
+
+      return
+    }
+    data.clientId = selectedClient
     dispatch(addCredit({ ...data })).then((result: any) => {
       const success = result.payload?.success
       if (success) {
@@ -137,6 +144,15 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
   const handleClose = () => {
     toggle()
     reset()
+  }
+
+  const clearDefaultValue = (
+    field: EventTarget & (HTMLInputElement | HTMLTextAreaElement),
+    clearValue: { (): void; (): void }
+  ) => {
+    if (field.value === '0') {
+      clearValue()
+    }
   }
 
   const handleCloseWithReason = (event: string, reason: string) => {
@@ -170,26 +186,43 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
               <Divider sx={{ mb: '0 !important' }} />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
                 Select Client
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} sm={12} md={6} lg={6}>
               <TextField
+                fullWidth
                 size='small'
                 value={searchValue}
-                sx={{ mr: 4 }}
+                sx={{ mb: 1 }}
                 placeholder='Search Client'
                 onChange={e => handleFilter(e.target.value)}
               />
-            </Grid>
 
-            <Grid item xs={6}>
-              <List sx={{ maxHeight: 300, overflow: 'auto', position: 'relative' }}>
+              <List
+                sx={{
+                  maxHeight: 300,
+                  overflow: 'auto',
+                  position: 'relative',
+                  border: '1px solid',
+                  borderColor: 'primary',
+                  borderRadius: 1
+                }}
+              >
+                {store.list.length === 0 && (
+                  <Typography variant='body2' sx={{ fontWeight: 100, marginLeft: 3, color: '' }}>
+                    No clients found
+                  </Typography>
+                )}
                 {store.list.map((client: ListType, index) => (
                   <ListItem dense key={client.id}>
-                    <ListItemButton selected={selectedClient === 0} onClick={() => handleListItemClick(client.id)}>
+                    <ListItemButton
+                      selected={selectedClient === client.id}
+                      onClick={async () => await handleListItemClick(client.id)}
+                    >
                       <ListItemAvatar>
                         <CustomAvatar
                           skin='light'
@@ -210,66 +243,143 @@ const SidebarAddCredit = (props: SidebarAddCreditType) => {
                 ))}
               </List>
             </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl fullWidth>
-                <Controller
-                  name='clientId'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.clientId)}
-                      fullWidth
-                      label='Client'
-                      placeholder='John'
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Icon icon='tabler:user' />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  )}
-                />
-                {errors.clientId && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.clientId.message}</FormHelperText>
-                )}
-              </FormControl>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <TextField
+                sx={{ mb: 3 }}
+                value={client.id}
+                fullWidth
+                label='Client Id'
+                size='small'
+                placeholder='0'
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Icon icon='tabler:123' />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <TextField
+                sx={{ mb: 3 }}
+                value={client.firstName + ' ' + client.lastName}
+                fullWidth
+                size='small'
+                label='Name'
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Icon icon='tabler:user' />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <TextField
+                sx={{ mb: 3 }}
+                value={client.email}
+                fullWidth
+                size='small'
+                label='Email'
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Icon icon='tabler:mail' />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <TextField
+                sx={{ mb: 3 }}
+                value={client.identificationNumber}
+                fullWidth
+                size='small'
+                label='Identification Number'
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Icon icon='tabler:id' />
+                    </InputAdornment>
+                  )
+                }}
+              />
             </Grid>
 
             <Grid item xs={12}>
               <Divider sx={{ mb: '0 !important' }} />
             </Grid>
-
+            <Grid item xs={12} sm={12}>
+              <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                Select Credit Information
+              </Typography>
+            </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <FormControl fullWidth>
                 <Controller
                   name='amount'
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: true, min: 1 }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
+                      type='number'
                       value={value}
-                      onChange={onChange}
+                      onFocus={e => clearDefaultValue(e.target, () => onChange(''))}
+                      onChange={e => {
+                        onChange(e)
+                        clearDefaultValue(e.target, () => onChange(''))
+                      }}
                       error={Boolean(errors.amount)}
                       fullWidth
-                      label='Last Name'
-                      placeholder='Doe'
+                      label='Amount'
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>
-                            <Icon icon='tabler:user-pause' />
+                            <Icon icon='tabler:moneybag' />
                           </InputAdornment>
-                        )
+                        ),
+                        endAdornment: <InputAdornment position='end'>$</InputAdornment>
                       }}
                     />
                   )}
                 />
                 {errors.amount && <FormHelperText sx={{ color: 'error.main' }}>{errors.amount.message}</FormHelperText>}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={3}>
+              <FormControl fullWidth>
+                <Controller
+                  name='interestRate'
+                  control={control}
+                  rules={{ required: true, min: 1 }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      type='number'
+                      value={value}
+                      onFocus={e => clearDefaultValue(e.target, () => onChange(''))}
+                      onChange={e => {
+                        onChange(e)
+                        clearDefaultValue(e.target, () => onChange(''))
+                      }}
+                      error={Boolean(errors.interestRate)}
+                      fullWidth
+                      label='Interest Rate'
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position='start'>
+                            <Icon icon='tabler:calculator' />
+                          </InputAdornment>
+                        ),
+                        endAdornment: <InputAdornment position='end'>%</InputAdornment>
+                      }}
+                    />
+                  )}
+                />
+                {errors.interestRate && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.interestRate.message}</FormHelperText>
+                )}
               </FormControl>
             </Grid>
           </Grid>

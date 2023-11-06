@@ -144,7 +144,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
 const columns = [
   {
     flex: 0.1,
-    minWidth: 45,
+    minWidth: 60,
     headerName: 'id',
     field: 'id',
     renderCell: ({ row }: CellType) => {
@@ -250,7 +250,7 @@ const columns = [
   },
   {
     flex: 0.1,
-    minWidth: 20,
+    minWidth: 100,
     sortable: false,
     field: 'actions',
     headerName: 'Actions',

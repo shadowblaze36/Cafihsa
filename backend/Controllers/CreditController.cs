@@ -1,3 +1,4 @@
+using Cafihsa.Dto;
 using Cafihsa.Enums;
 using Cafihsa.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,5 +29,12 @@ public class CreditController: ControllerBase
     {
         var clientStatuses = Enum.GetNames(typeof(CreditStatus));
         return Ok(clientStatuses);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] NewCreditDto credit)
+    {
+        await _creditService.Create(credit);
+        return Ok();
     }
 }

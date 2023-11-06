@@ -4,6 +4,7 @@ using Cafihsa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cafihsa.Migrations
 {
     [DbContext(typeof(CafihsaContext))]
-    partial class CafihsaContextModelSnapshot : ModelSnapshot
+    [Migration("20231103201129_RemoveDurationFromCredit")]
+    partial class RemoveDurationFromCredit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
