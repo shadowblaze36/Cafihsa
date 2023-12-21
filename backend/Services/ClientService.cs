@@ -18,7 +18,7 @@ public class ClientService : IClientService
 
     public async Task<ClientDto> GetByIdAsync(int id)
     {
-        var dbClient = await _db.Client.FirstOrDefaultAsync(c=> c.Id == id);
+        var dbClient = await _db.Client.Include(c => c.Credits).FirstOrDefaultAsync(c=> c.Id == id);
         
         if (dbClient == null)
         {

@@ -13,5 +13,6 @@ public class Credit
     public CreditStatus Status { get; set; }
 
     public Client? Client { get; set; }
-    public ICollection<PaymentPlan>? PaymentPlans { get; set; }
+    
+    public ICollection<Payment>? Payments { get; set; }
 }
